@@ -34,7 +34,14 @@ jobs:
       uses: Azure/cli@2.74.0
       with:
         inlineScript:  |
+          if command -v apt-get >/dev/null; then
           apt-get update && apt-get install -y git
+          elif command -v apk >/dev/null; then
+          apk add --no-cache git
+          else
+          echo "No supported package manager found. Cannot install git."
+          exit 1
+          fi
           chmod +x $GITHUB_WORKSPACE/utils/buildContainerTemplate.sh
           $GITHUB_WORKSPACE/utils/buildContainerTemplate.sh -f $SRC_FOLDER \
                                                            -g $GITHUB_WORKSPACE \
