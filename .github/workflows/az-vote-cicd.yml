@@ -31,7 +31,7 @@ jobs:
         IMAGE_NAME: azure-vote-front
         TASKNAME: FRONTEND_IMAGE
         AZ_ACR_NAME: ${{ secrets.AZ_ACR_NAME }}   
-      uses: Azure/cli@2.1.0
+      uses: Azure/cli@v2.1.0
       with:
         inlineScript:  |
           if command -v apt-get >/dev/null; then
