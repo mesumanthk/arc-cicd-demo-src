@@ -34,6 +34,7 @@ jobs:
       uses: Azure/cli@1.0.4
       with:
         inlineScript:  |
+          apt-get update && apt-get install -y git
           chmod +x $GITHUB_WORKSPACE/utils/buildContainerTemplate.sh
           $GITHUB_WORKSPACE/utils/buildContainerTemplate.sh -f $SRC_FOLDER \
                                                            -g $GITHUB_WORKSPACE \
@@ -52,6 +53,7 @@ jobs:
       uses: Azure/cli@1.0.4
       with:
         inlineScript:  |
+          apt-get update && apt-get install -y git
           chmod +x $GITHUB_WORKSPACE/utils/buildContainerTemplate.sh
           $GITHUB_WORKSPACE/utils/buildContainerTemplate.sh -f $SRC_FOLDER \
                                                            -g $GITHUB_WORKSPACE \
