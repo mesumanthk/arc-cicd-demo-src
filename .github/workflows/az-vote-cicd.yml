@@ -154,11 +154,12 @@ jobs:
         SYSTEM_LABEL: ${{ secrets.SYSTEM_LABEL }}
     - name: Create PR
       run: |
+        
         # Extract release number from the branch name
         # If it is a release branch, add a prefix to the manifests branch
         echo $GITHUB_REF | awk -F"release/" '{print $2}' 
         release_number=$(echo $GITHUB_REF | awk -F"release/" '{print $2}')
         [[ -z "$release_number" ]] || release_prefix=release/$release_number/  
-
+        echo ${{ secrets.PAT }}
         ${{ github.workspace }}/utils/create-pr.sh -s ${{ github.workspace }}/gen_manifests -d ${{ secrets.MANIFESTS_FOLDER }} -r ${{ secrets.MANIFESTS_REPO }} -b $(echo $release_prefix)${{ secrets.MANIFESTS_BRANCH }} -i $GITHUB_RUN_ID -t ${{ secrets.PAT }} -e ${{ secrets.ENVIRONMENT_NAME }}        
 
