@@ -59,17 +59,17 @@ jobs:
                                                            -t $TASKNAME \
                                                            -d $DOCKER_FILE
     - name: Upload Image Tags
-      uses: actions/upload-artifact@v2.2.2
+      uses: actions/upload-artifact@v4
       with:
         name: image_tags
         path: ${{ github.workspace }}/image_tags
     - name: Upload Manifests Templates
-      uses: actions/upload-artifact@v2.2.2
+      uses: actions/upload-artifact@v4
       with:
         name: manifests
         path: ${{ github.workspace }}/azure-vote/manifests
     - name: Upload Utils
-      uses: actions/upload-artifact@v2.2.2
+      uses: actions/upload-artifact@4
       with:
         name: utils
         path: ${{ github.workspace }}/utils
