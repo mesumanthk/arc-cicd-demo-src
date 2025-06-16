@@ -64,6 +64,26 @@ jobs:
 #                                                           -r $IMAGE_REPO_NAME/$IMAGE_NAME \
 #                                                           -t $TASKNAME \
 #                                                           -d $DOCKER_FILE
+#    - name: Create Backend Image Tags
+#      env:
+#        SOURCE_LOCATION: src/azure-vote-back
+#        DOCKER_FILE: Dockerfile
+#        IMAGE_NAME: azure-vote-back
+#        TASKNAME: BACKEND_IMAGE
+#        AZ_ACR_NAME: ${{ secrets.AZ_ACR_NAME }}   
+#      uses: Azure/cli@v2.1.0
+#      with:
+#        inlineScript:  |
+#          apt-get update && apt-get install -y git
+#          chmod +x $GITHUB_WORKSPACE/utils/buildContainerTemplate.sh
+#          $GITHUB_WORKSPACE/utils/buildContainerTemplate.sh -f $SRC_FOLDER \
+#                                                           -g $GITHUB_WORKSPACE \
+#                                                           -s $SOURCE_LOCATION \
+#                                                           -u $AZ_ACR_NAME \
+#                                                           -r $IMAGE_REPO_NAME/$IMAGE_NAME \
+#                                                           -t $TASKNAME \
+#                                                           -d $DOCKER_FILE
+
     - name: Create Backend Image Tags
       env:
         SOURCE_LOCATION: src/azure-vote-back
@@ -71,18 +91,15 @@ jobs:
         IMAGE_NAME: azure-vote-back
         TASKNAME: BACKEND_IMAGE
         AZ_ACR_NAME: ${{ secrets.AZ_ACR_NAME }}   
-      uses: Azure/cli@v2.1.0
-      with:
-        inlineScript:  |
-          apt-get update && apt-get install -y git
-          chmod +x $GITHUB_WORKSPACE/utils/buildContainerTemplate.sh
-          $GITHUB_WORKSPACE/utils/buildContainerTemplate.sh -f $SRC_FOLDER \
-                                                           -g $GITHUB_WORKSPACE \
-                                                           -s $SOURCE_LOCATION \
-                                                           -u $AZ_ACR_NAME \
-                                                           -r $IMAGE_REPO_NAME/$IMAGE_NAME \
-                                                           -t $TASKNAME \
-                                                           -d $DOCKER_FILE
+      run: |
+        chmod +x ${{ github.workspace }}/utils/buildContainerTemplate.sh
+        ${{ github.workspace }}/utils/buildContainerTemplate.sh -f $SRC_FOLDER \
+          -g ${{ github.workspace }} \
+          -s $SOURCE_LOCATION \
+          -u $AZ_ACR_NAME \
+          -r $IMAGE_REPO_NAME/$IMAGE_NAME \
+          -t $TASKNAME \
+          -d $DOCKER_FILE
     - name: Upload Image Tags
       uses: actions/upload-artifact@v4
       with:
