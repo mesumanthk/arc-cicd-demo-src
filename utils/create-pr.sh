@@ -21,6 +21,7 @@ echo $DEPLOY_ID
 echo $ENV_NAME
 echo "end of list"
 
+: "${TOKEN:?TOKEN is not set. Please provide -t <token>}"
 set -euo pipefail  # fail on error
 
 pr_user_name="Git Ops"
