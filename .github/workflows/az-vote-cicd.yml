@@ -16,10 +16,8 @@ jobs:
       SRC_FOLDER: azure-vote
       IMAGE_REPO_NAME: azvote      
     steps:
-    - name: Ensure Git is installed
-      run: sudo apt-get update && sudo apt-get install -y git
     - name: Checkout
-      uses: actions/checkout@v2.3.4
+      uses: actions/checkout@v4
     - name: Azure Login
       uses: azure/login@v1
       with:
@@ -31,25 +29,41 @@ jobs:
         IMAGE_NAME: azure-vote-front
         TASKNAME: FRONTEND_IMAGE
         AZ_ACR_NAME: ${{ secrets.AZ_ACR_NAME }}   
+      run: |
+        chmod +x ${{ github.workspace }}/utils/buildContainerTemplate.sh
+        ${{ github.workspace }}/utils/buildContainerTemplate.sh -f $SRC_FOLDER \
+          -g ${{ github.workspace }} \
+          -s $SOURCE_LOCATION \
+          -u $AZ_ACR_NAME \
+          -r $IMAGE_REPO_NAME/$IMAGE_NAME \
+          -t $TASKNAME \
+          -d $DOCKER_FILE
+#    - name: Create Frontend Image Tags
+#      env:
+#        SOURCE_LOCATION: src/azure-vote-front 
+#        DOCKER_FILE: Dockerfile
+#        IMAGE_NAME: azure-vote-front
+#        TASKNAME: FRONTEND_IMAGE
+#        AZ_ACR_NAME: ${{ secrets.AZ_ACR_NAME }}   
 #      uses: Azure/cli@v2.1.0
-      with:
-        inlineScript:  |
-          if command -v apt-get >/dev/null; then
-          apt-get update && apt-get install -y git
-          elif command -v apk >/dev/null; then
-          apk add --no-cache git
-          else
-          echo "No supported package manager found. Cannot install git."
-          exit 1
-          fi
-          chmod +x $GITHUB_WORKSPACE/utils/buildContainerTemplate.sh
-          $GITHUB_WORKSPACE/utils/buildContainerTemplate.sh -f $SRC_FOLDER \
-                                                           -g $GITHUB_WORKSPACE \
-                                                           -s $SOURCE_LOCATION \
-                                                           -u $AZ_ACR_NAME \
-                                                           -r $IMAGE_REPO_NAME/$IMAGE_NAME \
-                                                           -t $TASKNAME \
-                                                           -d $DOCKER_FILE
+#      with:
+#        inlineScript:  |
+#          if command -v apt-get >/dev/null; then
+#          apt-get update && apt-get install -y git
+#          elif command -v apk >/dev/null; then
+#          apk add --no-cache git
+#          else
+#          echo "No supported package manager found. Cannot install git."
+#          exit 1
+#          fi
+#          chmod +x $GITHUB_WORKSPACE/utils/buildContainerTemplate.sh
+#          $GITHUB_WORKSPACE/utils/buildContainerTemplate.sh -f $SRC_FOLDER \
+#                                                           -g $GITHUB_WORKSPACE \
+#                                                           -s $SOURCE_LOCATION \
+#                                                           -u $AZ_ACR_NAME \
+#                                                           -r $IMAGE_REPO_NAME/$IMAGE_NAME \
+#                                                           -t $TASKNAME \
+#                                                           -d $DOCKER_FILE
     - name: Create Backend Image Tags
       env:
         SOURCE_LOCATION: src/azure-vote-back
@@ -57,7 +71,7 @@ jobs:
         IMAGE_NAME: azure-vote-back
         TASKNAME: BACKEND_IMAGE
         AZ_ACR_NAME: ${{ secrets.AZ_ACR_NAME }}   
-      uses: Azure/cli@1.0.4
+      uses: Azure/cli@v2.1.0
       with:
         inlineScript:  |
           apt-get update && apt-get install -y git
@@ -91,7 +105,7 @@ jobs:
     environment: az-vote-app-dev
     steps:
     - name: Checkout
-      uses: actions/checkout@v2.3.4
+      uses: actions/checkout@v4
     - name: Download Image Tags
       uses: actions/download-artifact@v2.0.8
       with:
