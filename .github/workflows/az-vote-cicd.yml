@@ -161,5 +161,5 @@ jobs:
         release_number=$(echo $GITHUB_REF | awk -F"release/" '{print $2}')
         [[ -z "$release_number" ]] || release_prefix=release/$release_number/  
         echo ${{ secrets.PAT }}
-        ${{ github.workspace }}/utils/create-pr.sh -s ${{ github.workspace }}/gen_manifests -d ${{ secrets.MANIFESTS_FOLDER }} -r ${{ secrets.MANIFESTS_REPO }} -b $(echo $release_prefix)${{ secrets.MANIFESTS_BRANCH }} -i $GITHUB_RUN_ID -t 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 -e ${{ secrets.ENVIRONMENT_NAME }}        
+        ${{ github.workspace }}/utils/create-pr.sh -s ${{ github.workspace }}/gen_manifests -d ${{ secrets.MANIFESTS_FOLDER }} -r ${{ secrets.MANIFESTS_REPO }} -b $(echo $release_prefix)${{ secrets.MANIFESTS_BRANCH }} -i $GITHUB_RUN_ID -t ${{ github.token }} -e ${{ secrets.ENVIRONMENT_NAME }}        
 
