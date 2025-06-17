@@ -155,6 +155,11 @@ jobs:
     - name: Print PAT value
       run: |
         echo "PAT is: ${{ secrets.PAT }}"
+        if [ -z "${{ secrets.PAT }}" ]; then
+        echo "PAT is empty"
+        else
+        echo "PAT is set"
+        fi
     - name: Create PR
       run: | 
         # Extract release number from the branch name
